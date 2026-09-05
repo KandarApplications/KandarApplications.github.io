@@ -1,13 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kandar Applications</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kandar Applications</title>
+<meta name="description" content="Kandar Applications builds simple, useful software for Android, Windows, and the web.">
+<link rel="icon" href="assets/kandar-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0A0A;
+    --surface:#151515;
+    --surface-2:#1D1D1D;
+    --white:#FFFFFF;
+    --dim: rgba(255,255,255,0.62);
+    --dim-2: rgba(255,255,255,0.42);
+    --line: rgba(255,255,255,0.10);
+    --orange-deep:#E8590C;
+    --orange:#F2872B;
+    --orange-light:#FFB020;
+    --maxw: 940px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Inter', system-ui, sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Poppins', system-ui, sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  a{color:inherit;}
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  header.top{
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+  }
+  .brand img{
+    height:34px;
+    width:auto;
+    display:block;
+  }
+  nav.top-links{
+    display:flex;
+    gap:30px;
+    font-size:14.5px;
+  }
+  nav.top-links a{
+    text-decoration:none;
+    color:var(--dim);
+    transition:color .15s ease;
+  }
+  nav.top-links a:hover{ color:var(--white); }
+
+  /* Hero */
+  .hero{
+    padding:84px 0 64px;
+  }
+  .hero .kicker{
+    font-size:15px;
+    color:var(--orange-light);
+    margin-bottom:16px;
+    font-weight:500;
+  }
+  .hero h1{
+    font-size:clamp(34px, 5.6vw, 56px);
+    line-height:1.12;
+    max-width:760px;
+  }
+  .hero .lede{
+    margin-top:24px;
+    max-width:480px;
+    font-size:17.5px;
+    color:var(--dim);
+  }
+  .platform-row{
+    display:flex;
+    gap:12px;
+    margin-top:32px;
+    flex-wrap:wrap;
+  }
+  .platform-pill{
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 16px;
+    font-size:13.5px;
+    color:var(--dim);
+  }
+
+  /* Status strip */
+  .status{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(90deg, rgba(232,89,12,0.08), transparent 60%);
+  }
+  .status .wrap{
+    padding:18px 28px;
+    display:flex;
+    gap:14px;
+    align-items:center;
+    font-size:14.5px;
+    color:var(--dim);
+  }
+  .status .pulse{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--orange);
+    flex-shrink:0;
+    position:relative;
+  }
+  .status .pulse::after{
+    content:'';
+    position:absolute; inset:-5px;
+    border-radius:50%;
+    border:1px solid var(--orange);
+    opacity:.45;
+  }
+  .status strong{ color:var(--white); font-weight:500; }
+
+  section{
+    padding:72px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .section-head{
+    margin-bottom:36px;
+    max-width:520px;
+  }
+  .section-head h2{
+    font-size:26px;
+  }
+  .section-head p{
+    color:var(--dim);
+    font-size:15px;
+    margin:10px 0 0;
+  }
+
+  .principles{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .principle{
+    background:var(--bg);
+    padding:30px 26px;
+  }
+  .principle h3{
+    font-size:17px;
+    margin-bottom:10px;
+    color:var(--orange-light);
+  }
+  .principle p{
+    color:var(--dim);
+    font-size:14.5px;
+    margin:0;
+  }
+
+  /* Apps */
+  .app-card{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:30px;
+    background:var(--surface);
+    display:flex;
+    justify-content:space-between;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .app-card .name{
+    font-family:'Poppins', system-ui, sans-serif;
+    font-size:21px;
+    font-weight:600;
+  }
+  .app-card .tagline{
+    color:var(--orange-light);
+    font-size:14.5px;
+    margin-top:4px;
+    font-weight:500;
+  }
+  .app-card .desc{
+    color:var(--dim);
+    font-size:15px;
+    margin-top:14px;
+    max-width:480px;
+  }
+  .app-card .meta{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:12px;
+    flex-shrink:0;
+  }
+  .status-tag{
+    font-size:12.5px;
+    color:var(--orange-light);
+    border:1px solid var(--orange-deep);
+    padding:5px 13px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .app-card .platforms{
+    font-size:13px;
+    color:var(--dim-2);
+  }
+  .apps-note{
+    margin-top:18px;
+    font-size:13.5px;
+    color:var(--dim-2);
+  }
+
+  /* Follow */
+  .follow{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:48px;
+    align-items:start;
+  }
+  .follow h2{ font-size:28px; max-width:360px; }
+  .follow p{ color:var(--dim); margin-top:14px; max-width:400px; }
+  .link-list{ display:flex; flex-direction:column; }
+  .link-list a{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:17px 0;
+    border-top:1px solid var(--line);
+    text-decoration:none;
+    font-size:16px;
+  }
+  .link-list a:last-child{ border-bottom:1px solid var(--line); }
+  .link-list a:hover{ color:var(--orange-light); }
+  .link-list .action{ font-size:13.5px; color:var(--dim-2); }
+
+  footer{
+    padding:30px 0 46px;
+    display:flex;
+    justify-content:space-between;
+    color:var(--dim-2);
+    font-size:13px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+
+  @media (max-width: 720px){
+    .principles{ grid-template-columns:1fr; }
+    .follow{ grid-template-columns:1fr; }
+    nav.top-links{ display:none; }
+    .app-card{ flex-direction:column; }
+    .app-card .meta{ align-items:flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+  }
+</style>
 </head>
 <body>
-  <h1>Welcome to Kandar Applications - A Vikhruthi Initiative</h1>
-  <p>We build useful apps for Android, Windows, and Web.</p>
-  <p>Check back soon for more details!</p>
+
+<header class="top">
+  <div class="wrap topbar">
+    <a class="brand" href="#top">
+      <img src="assets/kandar-logo.png" alt="Kandar Applications">
+    </a>
+    <nav class="top-links">
+      <a href="#apps">Apps</a>
+      <a href="#approach">Approach</a>
+      <a href="#follow">Follow</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="kicker">Software studio</div>
+    <h1>Kandar Applications builds simple, useful software.</h1>
+    <p class="lede">Apps built with one goal: make small parts of your day a little easier.</p>
+    <div class="platform-row">
+      <span class="platform-pill">Android</span>
+      <span class="platform-pill">Windows</span>
+      <span class="platform-pill">Web</span>
+    </div>
+  </div>
+</section>
+
+<div class="status">
+  <div class="wrap">
+    <span class="pulse"></span>
+    <span><strong>ThrivingWS</strong> is currently in testing on Google Play — full release coming soon.</span>
+  </div>
+</div>
+
+<section id="approach">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How we build</h2>
+      <p>Three things that stay true across every app we release.</p>
+    </div>
+    <div class="principles">
+      <div class="principle">
+        <h3>Do one job well</h3>
+        <p>Every app has a single clear purpose. If a feature doesn't serve that purpose, it doesn't ship.</p>
+      </div>
+      <div class="principle">
+        <h3>Respect the user</h3>
+        <p>No dark patterns, no data hoarding, no nagging. You should feel good about installing what we make.</p>
+      </div>
+      <div class="principle">
+        <h3>Listen closely</h3>
+        <p>We listen more than we assume. Feedback shapes what we build next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="apps">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Apps</h2>
+      <p>What we're building right now.</p>
+    </div>
+    <div class="app-card">
+      <div>
+        <div class="name">ThrivingWS</div>
+        <div class="tagline">Building wealth, one calculation at a time.</div>
+        <div class="desc">A practical personal finance toolkit designed to help you understand, evaluate, and plan your finances through simple, transparent calculations.</div>
+      </div>
+      <div class="meta">
+        <span class="status-tag">In testing</span>
+        <span class="platforms">Android · Google Play</span>
+      </div>
+    </div>
+    <p class="apps-note">Each app will get its own page here with details, screenshots, and download links as it's ready to launch.</p>
+  </div>
+</section>
+
+<section id="follow" style="border-bottom:none;">
+  <div class="wrap follow">
+    <div>
+      <h2>Follow the build</h2>
+      <p>We share progress and release news before it lands anywhere else.</p>
+    </div>
+    <div class="link-list">
+      <a href="https://instagram.com/kandar.applications" target="_blank" rel="noopener">Instagram <span class="action">Follow</span></a>
+      <a href="https://github.com/KandarApplications" target="_blank" rel="noopener">GitHub <span class="action">View profile</span></a>
+      <a href="privacy.html">Privacy Policy <span class="action">Read</span></a>
+      <a href="mailto:kandar.applications@gmail.com">Email <span class="action">Contact</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+    <span>© 2026 Kandar Applications</span>
+    <span>A Vikhruthi initiative</span>
+  </div>
+</footer>
+
 </body>
 </html>
