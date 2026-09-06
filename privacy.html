@@ -1,41 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy - Kandar Applications</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
-    h1, h2 { color: #333; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy - Kandar Applications</title>
+<meta name="description" content="Privacy Policy for Kandar Applications.">
+<link rel="icon" href="assets/kandar-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0A0A;
+    --surface:#151515;
+    --white:#FFFFFF;
+    --dim: rgba(255,255,255,0.62);
+    --dim-2: rgba(255,255,255,0.42);
+    --line: rgba(255,255,255,0.10);
+    --orange-deep:#E8590C;
+    --orange:#F2872B;
+    --orange-light:#FFB020;
+    --maxw: 760px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Inter', system-ui, sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2{
+    font-family:'Poppins', system-ui, sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  a{color:inherit;}
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  header.top{
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .back-link{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+    font-size:14.5px;
+    color:var(--dim);
+    transition:color .15s ease;
+  }
+  .back-link:hover{ color:var(--orange-light); }
+  .back-link .arrow{
+    font-size:15px;
+    color:var(--orange-light);
+  }
+  .brand-mark img{
+    height:26px;
+    width:auto;
+    display:block;
+    opacity:0.9;
+  }
+
+  main{
+    padding:64px 0 80px;
+  }
+  .page-head{
+    margin-bottom:44px;
+    padding-bottom:32px;
+    border-bottom:1px solid var(--line);
+  }
+  .page-head h1{
+    font-size:clamp(30px, 4.6vw, 42px);
+  }
+  .page-head .eff-date{
+    margin-top:14px;
+    font-size:14.5px;
+    color:var(--dim-2);
+  }
+
+  .policy-section{
+    padding:26px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .policy-section:last-of-type{ border-bottom:none; }
+  .policy-section h2{
+    font-size:19px;
+    color:var(--orange-light);
+    margin-bottom:12px;
+  }
+  .policy-section p{
+    color:var(--dim);
+    font-size:15.5px;
+    margin:0;
+    max-width:620px;
+  }
+  .policy-section a.email{
+    color:var(--white);
+    text-decoration:underline;
+    text-decoration-color:var(--orange-deep);
+    text-underline-offset:3px;
+  }
+  .policy-section a.email:hover{ color:var(--orange-light); }
+
+  footer{
+    padding:30px 0 46px;
+    display:flex;
+    justify-content:space-between;
+    color:var(--dim-2);
+    font-size:13px;
+    flex-wrap:wrap;
+    gap:12px;
+    border-top:1px solid var(--line);
+  }
+
+  @media (max-width: 600px){
+    .brand-mark{ display:none; }
+  }
+</style>
 </head>
 <body>
-  <h1>Privacy Policy</h1>
-  <p>Effective Date: August 30, 2026</p>
 
-  <h2>Introduction</h2>
-  <p>Kandar Applications (“we”, “our”, “us”) values your privacy. This Privacy Policy explains how our apps handle information and protect your rights as a user.</p>
+<header class="top">
+  <div class="wrap topbar">
+    <a class="back-link" href="https://kandarapplications.github.io/">
+      <span class="arrow">←</span> Back to Kandar Applications
+    </a>
+    <a class="brand-mark" href="https://kandarapplications.github.io/">
+      <img src="assets/kandar-logo.png" alt="Kandar Applications">
+    </a>
+  </div>
+</header>
 
-  <h2>Information We Collect</h2>
-  <p>Our apps are designed to be simple and safe. Unless explicitly stated in the app description, we do not collect, store, or share personal information. Some apps may access basic device features (such as storage or internet) solely to provide functionality.</p>
+<main>
+  <div class="wrap">
+    <div class="page-head">
+      <h1>Privacy Policy</h1>
+      <div class="eff-date">Effective Date: August 30, 2026</div>
+    </div>
 
-  <h2>Use of Information</h2>
-  <p>If any non-personal data is collected (such as app usage statistics or crash reports), it is used only to improve app performance and user experience. We do not sell or share this data with third parties.</p>
+    <div class="policy-section">
+      <h2>Introduction</h2>
+      <p>Kandar Applications ("we", "our", "us") values your privacy. This Privacy Policy explains how our apps handle information and protect your rights as a user.</p>
+    </div>
 
-  <h2>Third-Party Services</h2>
-  <p>Some apps may integrate third-party services (such as advertisements or analytics). These services may collect limited information as described in their own privacy policies. We encourage you to review those policies when applicable.</p>
+    <div class="policy-section">
+      <h2>Information We Collect</h2>
+      <p>Our apps are designed to be simple and safe. Unless explicitly stated in the app description, we do not collect, store, or share personal information. Some apps may access basic device features (such as storage or internet) solely to provide functionality.</p>
+    </div>
 
-  <h2>Children’s Privacy</h2>
-  <p>Our apps are intended for general audiences. We do not knowingly collect personal information from children under 13. If you believe a child has provided personal data, please contact us so we can remove it.</p>
+    <div class="policy-section">
+      <h2>Use of Information</h2>
+      <p>If any non-personal data is collected (such as app usage statistics or crash reports), it is used only to improve app performance and user experience. We do not sell or share this data with third parties.</p>
+    </div>
 
-  <h2>Security</h2>
-  <p>We take reasonable measures to protect your information and ensure our apps are safe to use. However, no method of transmission or storage is completely secure.</p>
+    <div class="policy-section">
+      <h2>Third-Party Services</h2>
+      <p>Some apps may integrate third-party services (such as advertisements or analytics). These services may collect limited information as described in their own privacy policies. We encourage you to review those policies when applicable.</p>
+    </div>
 
-  <h2>Changes to This Policy</h2>
-  <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with a revised effective date.</p>
+    <div class="policy-section">
+      <h2>Children's Privacy</h2>
+      <p>Our apps are intended for general audiences. We do not knowingly collect personal information from children under 13. If you believe a child has provided personal data, please contact us so we can remove it.</p>
+    </div>
 
-  <h2>Contact Us</h2>
-  <p>If you have questions or concerns about this Privacy Policy, please contact us at:</p>
-  <p>Email: kandar.applications@gmail.com</p>
+    <div class="policy-section">
+      <h2>Security</h2>
+      <p>We take reasonable measures to protect your information and ensure our apps are safe to use. However, no method of transmission or storage is completely secure.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with a revised effective date.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>Contact Us</h2>
+      <p>If you have questions or concerns about this Privacy Policy, please contact us at:<br>
+      Email: <a class="email" href="mailto:kandar.applications@gmail.com">kandar.applications@gmail.com</a></p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+    <span>© 2026 Kandar Applications</span>
+    <span>A Vikhruthi initiative</span>
+  </div>
+</footer>
+
 </body>
 </html>
