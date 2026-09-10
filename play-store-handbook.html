@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Finished App to Google Play: A Flutter Developer's Field Manual</title>
+<style>
+  :root {
+    --paper: #EDEFF2;
+    --paper-raised: #FFFFFF;
+    --ink: #1B2430;
+    --ink-soft: #4A5568;
+    --rule: #C7CCD4;
+    --accent: #B4740E;
+    --accent-soft: #F3E6D0;
+    --warn: #A33A2E;
+    --warn-soft: #F5E1DD;
+    --code-bg: #16202B;
+    --code-text: #DCE4EC;
+    --code-accent: #E8B360;
+    --serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  a { color: var(--accent); }
+  a:hover { color: var(--warn); }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 760px);
+    justify-content: center;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Sidebar ---------- */
+  nav.toc {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 48px 28px 48px 32px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .toc-kicker {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    margin: 0 0 4px;
+  }
+
+  .toc-title {
+    font-family: var(--serif);
+    font-size: 21px;
+    line-height: 1.3;
+    margin: 0 0 28px;
+  }
+
+  .toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: toc-counter;
+  }
+
+  .toc li {
+    counter-increment: toc-counter;
+    margin-bottom: 2px;
+  }
+
+  .toc a {
+    display: flex;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    padding: 6px 8px;
+    border-radius: 3px;
+  }
+
+  .toc a::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+
+  .toc a:hover { background: var(--paper-raised); color: var(--ink); }
+
+  /* ---------- Main content ---------- */
+  main {
+    padding: 56px 40px 120px;
+    min-width: 0;
+  }
+
+  header.masthead {
+    margin-bottom: 56px;
+    padding-bottom: 32px;
+    border-bottom: 3px solid var(--ink);
+  }
+
+  header.masthead .kicker {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    margin: 0 0 14px;
+  }
+
+  h1.doc-title {
+    font-family: var(--serif);
+    font-size: 42px;
+    line-height: 1.15;
+    margin: 0 0 18px;
+  }
+
+  .doc-dek {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  section.step {
+    margin-bottom: 64px;
+    scroll-margin-top: 24px;
+  }
+
+  .step-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .step-num {
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  h2.step-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    margin: 0;
+  }
+
+  section.step p { font-size: 16px; }
+
+  section.step h3 {
+    font-family: var(--serif);
+    font-size: 18px;
+    margin: 28px 0 10px;
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: var(--accent-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 18px 20px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin: 16px 0;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  pre .comment { color: #7C8B9C; }
+  pre .accent { color: var(--code-accent); }
+
+  .callout {
+    display: flex;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 6px;
+    margin: 20px 0;
+    font-size: 15px;
+  }
+
+  .callout .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+    padding: 3px 8px;
+    border-radius: 3px;
+    height: fit-content;
+    white-space: nowrap;
+  }
+
+  .callout.note {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+  }
+  .callout.note .tag { background: var(--accent-soft); color: var(--accent); }
+
+  .callout.warn {
+    background: var(--warn-soft);
+    border: 1px solid #E0BEB6;
+  }
+  .callout.warn .tag { background: var(--warn); color: #fff; }
+
+  .callout p { margin: 0; font-size: 14.5px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  th, td {
+    text-align: left;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+  th {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: normal;
+  }
+
+  ul.plain, ol.plain { padding-left: 22px; }
+  ul.plain li, ol.plain li { margin-bottom: 6px; }
+
+  .platform-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 18px 0 -4px;
+  }
+  .platform-tabs span {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    padding: 3px 9px;
+    border-radius: 3px;
+  }
+
+  footer.colophon {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 40px 80px;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    border-top: 1px solid var(--rule);
+  }
+
+  @media (max-width: 880px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.toc {
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--rule);
+      padding: 32px 24px;
+    }
+    main { padding: 40px 24px 100px; }
+    h1.doc-title { font-size: 32px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <nav class="toc" aria-label="Table of contents">
+    <p class="toc-kicker">Developer field manual</p>
+    <p class="toc-title">Finished App&nbsp;→&nbsp;Play Store Testing</p>
+    <ol>
+      <li><a href="#prereqs">Before you start</a></li>
+      <li><a href="#identity">Lock in your app identity</a></li>
+      <li><a href="#signing-key">Generate a signing key</a></li>
+      <li><a href="#wire-signing">Wire signing into Gradle</a></li>
+      <li><a href="#build">Build the release artifact</a></li>
+      <li><a href="#launcher-icon">Set the launcher icon</a></li>
+      <li><a href="#assets">Prepare store listing assets</a></li>
+      <li><a href="#console">Set up the Play Console listing</a></li>
+      <li><a href="#adb">Set up ADB for on-device debugging</a></li>
+      <li><a href="#testing">Release to internal testing</a></li>
+      <li><a href="#pitfalls">Common pitfalls &amp; fixes</a></li>
+      <li><a href="#after">What happens after you upload</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="masthead">
+      <p class="kicker">FLUTTER · ANDROID · GOOGLE PLAY CONSOLE</p>
+      <h1 class="doc-title">From a Finished App to Google Play Testing</h1>
+      <p class="doc-dek">A step-by-step path from a debug-only Flutter project to a signed build sitting in Play Console's internal testing track — written from the ground up, including the parts that go wrong.</p>
+    </header>
+
+    <!-- 1 -->
+    <section class="step" id="prereqs">
+      <div class="step-head">
+        <span class="step-num">01</span>
+        <h2 class="step-title">Before you start</h2>
+      </div>
+      <p>You'll need three things in place before touching Gradle:</p>
+      <table>
+        <tr><th>Requirement</th><th>Notes</th></tr>
+        <tr><td>Google Play Developer account</td><td>One-time $25 registration fee, tied to a Google account.</td></tr>
+        <tr><td>Flutter project, debug-tested</td><td>Runs fine via <code>flutter run</code> — release signing comes next.</td></tr>
+        <tr><td>Java (JDK)</td><td>Needed for <code>keytool</code>. Bundled with Android Studio if you have it installed.</td></tr>
+      </table>
+    </section>
+
+    <!-- 2 -->
+    <section class="step" id="identity">
+      <div class="step-head">
+        <span class="step-num">02</span>
+        <h2 class="step-title">Lock in your app identity</h2>
+      </div>
+      <p>Two identifiers matter, and one of them can never change once you publish.</p>
+
+      <h3>Application ID</h3>
+      <p>In <code>android/app/build.gradle.kts</code>, set a unique reverse-domain identifier:</p>
+      <pre><code><span class="comment">// android/app/build.gradle.kts</span>
+defaultConfig {
+    applicationId = <span class="accent">"com.yourcompany.yourapp"</span>
+    <span class="comment">// ...</span>
+}</code></pre>
+
+      <div class="callout warn">
+        <span class="tag">Permanent</span>
+        <p>Never ship with the default <code>com.example.*</code> placeholder — Google Play locks the <code>applicationId</code> to your listing forever on first upload. If you set it up in Play Console before matching it in your code, your build upload will be rejected with a package name mismatch until they agree.</p>
+      </div>
+
+      <h3>Version</h3>
+      <p>In <code>pubspec.yaml</code>, the number after the <code>+</code> is your <strong>versionCode</strong> — it must strictly increase with every upload, forever, even across builds that never went live:</p>
+      <pre><code><span class="comment"># pubspec.yaml</span>
+version: 1.0.0+1</code></pre>
+    </section>
+
+    <!-- 3 -->
+    <section class="step" id="signing-key">
+      <div class="step-head">
+        <span class="step-num">03</span>
+        <h2 class="step-title">Generate a signing key</h2>
+      </div>
+      <p>Every release build needs to be cryptographically signed. Generate an upload key with <code>keytool</code> (bundled with your JDK):</p>
+      <pre><code>keytool -genkey -v -keystore ../upload-keystore-yourapp.jks \
+  -keyalg RSA -keysize 2048 -validity 10000 -alias upload</code></pre>
+      <p>Run this from inside your project's <code>android/</code> folder if you want the file to land one level up, in your project root — adjust the <code>../</code> to taste. The filename itself is arbitrary; it never has to be called <code>upload-keystore.jks</code>.</p>
+
+      <h3>What it asks for</h3>
+      <ul class="plain">
+        <li><strong>Keystore password</strong> — becomes <code>storePassword</code></li>
+        <li><strong>Key password</strong> — becomes <code>keyPassword</code> (press Enter to reuse the keystore password)</li>
+        <li>Name / org / location fields — cosmetic metadata only, no functional effect</li>
+      </ul>
+
+      <div class="callout warn">
+        <span class="tag">No recovery</span>
+        <p>Write the passwords into a password manager and back up the <code>.jks</code> file somewhere durable. If you lose either, you generally cannot push further updates to that app listing.</p>
+      </div>
+
+      <div class="callout note">
+        <span class="tag">Reuse?</span>
+        <p>Technically one keystore can sign multiple apps — Play App Signing means it only acts as your <em>upload</em> key, not the key that actually signs what users download. Still, a dedicated key per app keeps a compromised or lost key's blast radius contained to one app.</p>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="step" id="wire-signing">
+      <div class="step-head">
+        <span class="step-num">04</span>
+        <h2 class="step-title">Wire signing into Gradle</h2>
+      </div>
+
+      <h3>Create key.properties</h3>
+      <p>New file at <code>android/key.properties</code> (same folder level as <code>build.gradle.kts</code>, not inside <code>app/</code>):</p>
+      <pre><code>storePassword=<span class="accent">yourStorePassword</span>
+keyPassword=<span class="accent">yourKeyPassword</span>
+keyAlias=upload
+storeFile=<span class="accent">/absolute/path/to/upload-keystore-yourapp.jks</span></code></pre>
+      <p>Add it to <code>.gitignore</code> immediately, alongside the keystore itself:</p>
+      <pre><code>key.properties
+*.jks</code></pre>
+
+      <h3>Edit build.gradle.kts</h3>
+      <div class="platform-tabs"><span>Kotlin DSL</span></div>
+      <pre><code><span class="comment">// at the very top of android/app/build.gradle.kts</span>
+import java.util.Properties
+import java.io.FileInputStream
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file(<span class="accent">"key.properties"</span>)
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+android {
+    <span class="comment">// ... existing config ...</span>
+
+    signingConfigs {
+        create(<span class="accent">"release"</span>) {
+            keyAlias = keystoreProperties[<span class="accent">"keyAlias"</span>] as String?
+            keyPassword = keystoreProperties[<span class="accent">"keyPassword"</span>] as String?
+            storeFile = keystoreProperties[<span class="accent">"storeFile"</span>]?.let { file(it as String) }
+            storePassword = keystoreProperties[<span class="accent">"storePassword"</span>] as String?
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName(<span class="accent">"release"</span>)
+        }
+    }
+}</code></pre>
+
+      <div class="callout note">
+        <span class="tag">Gotcha</span>
+        <p>Flutter's default template ships <code>signingConfig = signingConfigs.getByName("debug")</code> inside <code>buildTypes { release { ... } }</code> — make sure that line gets replaced, not left in alongside the new one.</p>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="step" id="build">
+      <div class="step-head">
+        <span class="step-num">05</span>
+        <h2 class="step-title">Build the release artifact</h2>
+      </div>
+      <p>Play Console requires an <strong>App Bundle</strong> (<code>.aab</code>), not a raw APK, for new app uploads:</p>
+      <pre><code>flutter clean
+flutter pub get
+flutter build appbundle --release</code></pre>
+      <p>Output lands at:</p>
+      <pre><code>build/app/outputs/bundle/release/app-release.aab</code></pre>
+
+      <h3>Verify the signature</h3>
+      <pre><code>jarsigner -verify -verbose -certs build/app/outputs/bundle/release/app-release.aab</code></pre>
+      <p>Look for your own certificate details (from the <code>keytool</code> prompts) rather than anything saying "Android Debug".</p>
+
+      <div class="callout note">
+        <span class="tag">Optional</span>
+        <p>A release <strong>APK</strong> is only needed for manually sideloading onto a device to test — Play Console itself never wants one for a new app. Build with <code>flutter build apk --release</code> if you want to test locally first.</p>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="step" id="launcher-icon">
+      <div class="step-head">
+        <span class="step-num">06</span>
+        <h2 class="step-title">Set the launcher icon</h2>
+      </div>
+      <p>The icon you upload to the Play Console <em>listing</em> is separate from your app's actual launcher icon (the one on the home screen) — the second one lives inside <code>android/app/src/main/res/mipmap-*/</code> and won't update on its own.</p>
+
+      <p>Add the <code>flutter_launcher_icons</code> package to <code>pubspec.yaml</code>:</p>
+      <pre><code>dev_dependencies:
+  flutter_launcher_icons: ^0.14.1
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: <span class="accent">"assets/icon/app_icon.png"</span>
+  min_sdk_android: 21</code></pre>
+      <p>Place your source icon (1024×1024 works well) at that path, then run:</p>
+      <pre><code>flutter pub get
+dart run flutter_launcher_icons</code></pre>
+
+      <div class="callout note">
+        <span class="tag">Adaptive icons</span>
+        <p>For Android's adaptive icon system, you can supply separate foreground/background layers instead of one flat image:</p>
+      </div>
+      <pre><code>flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: <span class="accent">"assets/icon/app_icon.png"</span>
+  adaptive_icon_background: <span class="accent">"assets/icon/app_icon_background.png"</span>
+  adaptive_icon_foreground: <span class="accent">"assets/icon/app_icon_foreground.png"</span></code></pre>
+
+      <div class="callout warn">
+        <span class="tag">iOS off but still fails?</span>
+        <p>If <code>ios: false</code> but the tool still throws a <code>PathNotFoundException</code> hunting for an iOS asset catalog file, your <code>ios/</code> folder is likely incomplete or missing. Safe to ignore if you're Android-only for now; the Android icon step will have already completed successfully before the error.</p>
+      </div>
+
+      <p>Rebuild afterward so the new icon actually ships:</p>
+      <pre><code>flutter clean
+flutter build appbundle --release</code></pre>
+    </section>
+
+    <!-- 7 -->
+    <section class="step" id="assets">
+      <div class="step-head">
+        <span class="step-num">07</span>
+        <h2 class="step-title">Prepare store listing assets</h2>
+      </div>
+      <table>
+        <tr><th>Asset</th><th>Spec</th></tr>
+        <tr><td>App icon</td><td>512 × 512 px, 32-bit PNG with alpha</td></tr>
+        <tr><td>Feature graphic</td><td>1024 × 500 px, JPG or 24-bit PNG (no alpha) — mandatory</td></tr>
+        <tr><td>Phone screenshots</td><td>Minimum 2, up to 8. At least 4 total and at least 3 in a clean 16:9 or 9:16 ratio are needed to be eligible for store promotion. Short side ≥ 1080px.</td></tr>
+        <tr><td>Short description</td><td>Max 80 characters</td></tr>
+        <tr><td>Full description</td><td>Max 4000 characters</td></tr>
+        <tr><td>Privacy policy URL</td><td>Mandatory, even for apps collecting minimal data — a hosted static page is enough</td></tr>
+      </table>
+
+      <div class="callout warn">
+        <span class="tag">Screenshot ratio trap</span>
+        <p>Modern phones often shoot screenshots at tall ratios like 19.5:9, which Play Console does <em>not</em> count toward the "16:9 or 9:16" requirement. Place raw screenshots onto a fixed 1080×1920 (portrait) or 1920×1080 (landscape) canvas in an editor — Canva's Play Store templates work well — rather than uploading them straight off-device.</p>
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section class="step" id="console">
+      <div class="step-head">
+        <span class="step-num">08</span>
+        <h2 class="step-title">Set up the Play Console listing</h2>
+      </div>
+      <ol class="plain">
+        <li>Create the app entry in Play Console, entering the exact <code>applicationId</code> you locked in earlier.</li>
+        <li>Fill in Store Listing: title, descriptions, graphics.</li>
+        <li>Complete the Content Rating questionnaire.</li>
+        <li>Fill out Data Safety — what your app actually collects and shares. Check this against real behavior, not assumptions.</li>
+        <li>Set target countries and pricing.</li>
+        <li>Upload the <code>.aab</code> under a testing track (not Production yet).</li>
+      </ol>
+    </section>
+
+    <!-- 9 -->
+    <section class="step" id="adb">
+      <div class="step-head">
+        <span class="step-num">09</span>
+        <h2 class="step-title">Set up ADB for on-device debugging</h2>
+      </div>
+      <p>You'll want this the moment a release build behaves differently from debug — which happens more often than you'd expect.</p>
+
+      <h3>Locate or install adb</h3>
+      <p>It ships with the Android SDK, usually under:</p>
+      <pre><code>%LOCALAPPDATA%\Android\Sdk\platform-tools\adb.exe</code></pre>
+      <p>Run it directly by full path, or add the folder to your system <code>PATH</code> so <code>adb</code> works on its own from any terminal.</p>
+
+      <h3>Enable developer options on the phone</h3>
+      <ol class="plain">
+        <li>Settings → About phone → tap "Build number" 7 times.</li>
+        <li>Return to Settings → System → Developer options → toggle <strong>USB debugging</strong> on.</li>
+      </ol>
+
+      <div class="callout note">
+        <span class="tag">MIUI / Xiaomi</span>
+        <p>Developer options live under <strong>Settings → Additional settings → Developer options</strong>, not under About phone. You may also see a second toggle, <strong>USB debugging (Security settings)</strong>, and an <strong>Install via USB</strong> toggle — both sometimes require signing into your Mi account with an active internet connection to enable.</p>
+      </div>
+
+      <h3>Connect and authorize</h3>
+      <ol class="plain">
+        <li>Plug in a data-capable USB cable.</li>
+        <li>Set the USB mode notification to "File transfer / MTP" — not "Charging only."</li>
+        <li>A popup appears on the phone: <em>"Allow USB debugging?"</em> — check "Always allow" and accept.</li>
+      </ol>
+      <pre><code>adb devices
+<span class="comment"># should list your phone's serial number followed by "device"</span></code></pre>
+
+      <div class="callout warn">
+        <span class="tag">Says "unauthorized"?</span>
+        <p>The authorization popup was missed or dismissed. Unplug and replug the cable to trigger it again, and watch the phone screen this time.</p>
+      </div>
+
+      <h3>Capture a crash log</h3>
+      <pre><code>adb logcat *:E</code></pre>
+      <p>Open the app, let it crash, then search the output for a block starting with <code>FATAL EXCEPTION</code> — that's the actual error and stack trace.</p>
+
+      <div class="callout note">
+        <span class="tag">No cable handy?</span>
+        <p>Android 11+ supports wireless debugging: Developer options → Wireless debugging → pair with a code, then <code>adb pair &lt;ip&gt;:&lt;port&gt;</code> followed by <code>adb connect &lt;ip&gt;:&lt;port&gt;</code>, with phone and PC on the same Wi-Fi network.</p>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section class="step" id="testing">
+      <div class="step-head">
+        <span class="step-num">10</span>
+        <h2 class="step-title">Release to internal testing</h2>
+      </div>
+      <p>Don't go straight to Production. Play Console's <strong>Internal Testing</strong> track processes near-instantly, needs no review, and lets you install the app through the real Play Store pipeline — the same signing and packaging path your actual users will hit.</p>
+      <ol class="plain">
+        <li>Testing → Internal testing → upload your <code>.aab</code>.</li>
+        <li>Add your own Google account (or a small group) as testers.</li>
+        <li>Share the opt-in link; install via the Play Store app itself, not a sideload.</li>
+        <li>Check the <strong>Pre-launch report</strong> after a short wait — Google runs your build on real hosted devices and surfaces crash traces, screenshots per screen, and accessibility flags automatically.</li>
+      </ol>
+    </section>
+
+    <!-- 11 -->
+    <section class="step" id="pitfalls">
+      <div class="step-head">
+        <span class="step-num">11</span>
+        <h2 class="step-title">Common pitfalls &amp; fixes</h2>
+      </div>
+
+      <h3>"Your APK or App Bundle needs to have the package name X"</h3>
+      <p>Play Console locked the package name in when the app entry was created. Update <code>applicationId</code> in <code>build.gradle.kts</code> to match exactly, then:</p>
+      <pre><code>flutter clean
+flutter build appbundle --release</code></pre>
+
+      <h3>Crash: ClassNotFoundException for MainActivity</h3>
+      <p>Happens after renaming your package. Changing <code>applicationId</code>/<code>namespace</code> doesn't move the actual Kotlin file — it's still sitting in the old folder with the old <code>package</code> declaration.</p>
+      <pre><code><span class="comment"># move the file to match the new package path</span>
+android/app/src/main/kotlin/com/yourcompany/yourapp/MainActivity.kt</code></pre>
+      <p>Then update the line at the top of that file:</p>
+      <pre><code>package com.yourcompany.yourapp</code></pre>
+
+      <h3>"Version code X has already been used"</h3>
+      <p>Play Console tracks every uploaded versionCode permanently, even from unpublished test uploads. Bump the number after the <code>+</code> in <code>pubspec.yaml</code> and rebuild — there's no way to reuse or free up a version code.</p>
+
+      <h3>Screenshots rejected for promotion eligibility</h3>
+      <p>See the ratio trap under <a href="#assets">store listing assets</a> — resize onto a proper 16:9 / 9:16 canvas rather than uploading raw device screenshots.</p>
+    </section>
+
+    <!-- 12 -->
+    <section class="step" id="after">
+      <div class="step-head">
+        <span class="step-num">12</span>
+        <h2 class="step-title">What happens after you upload</h2>
+      </div>
+      <p>Internal testing builds are available almost immediately to your listed testers — no review wait. Moving to Closed, Open, or Production testing triggers Google's review process, which commonly takes anywhere from a few hours to about a week for a first-time app.</p>
+      <p>Don't treat review as your testing step. Google's review checks policy compliance, not whether your app actually works — a build can pass review and still crash for every real user if it wasn't verified on a physical device first.</p>
+    </section>
+
+  </main>
+</div>
+
+<footer class="colophon">
+  Field notes from one Flutter release cycle — your mileage on specific Play Console error text and MIUI menu locations may vary by version.
+</footer>
+
+</body>
+</html>
