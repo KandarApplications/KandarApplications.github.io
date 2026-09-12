@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flutter UI Polish Guide — Kandar Applications</title>
+<meta name="description" content="A three-part guide to theming, readability and tooltips, and splash screens in Flutter apps.">
+<link rel="icon" href="assets/kandar-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0A0A;
+    --surface:#151515;
+    --surface-2:#1D1D1D;
+    --white:#FFFFFF;
+    --dim: rgba(255,255,255,0.62);
+    --dim-2: rgba(255,255,255,0.42);
+    --line: rgba(255,255,255,0.10);
+    --orange-deep:#E8590C;
+    --orange:#F2872B;
+    --orange-light:#FFB020;
+    --maxw: 880px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Inter', system-ui, sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Poppins', system-ui, sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  a{color:inherit;}
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+  code, pre{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+  header.top{ padding:22px 0; border-bottom:1px solid var(--line); }
+  .topbar{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .brand img{ height:34px; width:auto; display:block; }
+  .back-link{
+    font-size:14px; color:var(--dim); text-decoration:none;
+    transition:color .15s ease;
+  }
+  .back-link:hover{ color:var(--white); }
+
+  .hero{ padding:72px 0 40px; }
+  .hero .kicker{ font-size:15px; color:var(--orange-light); margin-bottom:16px; font-weight:500; }
+  .hero h1{ font-size:clamp(32px, 5.2vw, 48px); line-height:1.15; max-width:640px; }
+  .hero .lede{ margin-top:22px; max-width:520px; font-size:17px; color:var(--dim); }
+
+  .rail{
+    display:flex;
+    gap:0;
+    margin-top:40px;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .rail a{
+    flex:1;
+    text-decoration:none;
+    padding:16px 4px;
+    font-size:14px;
+    color:var(--dim-2);
+    text-align:center;
+    border-right:1px solid var(--line);
+    transition:color .15s ease;
+  }
+  .rail a:last-child{ border-right:none; }
+  .rail a:hover{ color:var(--white); }
+  .rail .dot{
+    display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:currentColor; margin-right:8px; vertical-align:middle;
+  }
+
+  .chapter{
+    padding:64px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .chapter-inner{
+    display:flex;
+    gap:48px;
+    align-items:flex-start;
+  }
+  .chapter:nth-of-type(even) .chapter-inner{ flex-direction:row-reverse; }
+  .chapter-art{
+    flex:0 0 260px;
+    border-radius:16px;
+    padding:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .chapter-body{ flex:1; min-width:0; }
+  .chapter-kicker{ font-size:13.5px; margin-bottom:10px; font-weight:500; }
+  .chapter h2{ font-size:24px; margin-bottom:14px; }
+  .chapter p{ color:var(--dim); font-size:15.5px; margin:0 0 16px; }
+  .chapter p:last-child{ margin-bottom:0; }
+
+  .snippet{
+    background:var(--surface-2);
+    border-radius:10px;
+    padding:18px 20px;
+    font-size:13px;
+    color:rgba(255,255,255,0.85);
+    overflow-x:auto;
+    margin:18px 0;
+    border-left:3px solid var(--accent, var(--orange));
+    white-space:pre;
+  }
+
+  .note{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    font-size:14px;
+    color:var(--dim);
+    margin:18px 0;
+    padding:14px 16px;
+    background:var(--surface);
+    border-radius:10px;
+  }
+  .note svg{ flex-shrink:0; margin-top:2px; }
+
+  .check-list{ list-style:none; margin:18px 0 0; padding:0; }
+  .check-list li{
+    display:flex; gap:10px; align-items:flex-start;
+    font-size:14.5px; color:var(--dim);
+    padding:8px 0;
+  }
+  .check-list svg{ flex-shrink:0; margin-top:3px; }
+
+  .closing{ padding:64px 0; }
+  .closing h2{ font-size:22px; margin-bottom:20px; }
+  .order-list{ list-style:none; margin:0; padding:0; counter-reset:step; }
+  .order-list li{
+    counter-increment:step;
+    display:flex; gap:16px; align-items:baseline;
+    padding:14px 0;
+    border-top:1px solid var(--line);
+    font-size:15px;
+    color:var(--dim);
+  }
+  .order-list li:last-child{ border-bottom:1px solid var(--line); }
+  .order-list li::before{
+    content:counter(step);
+    font-family:'Poppins', system-ui, sans-serif;
+    font-size:13px;
+    color:var(--orange-light);
+    border:1px solid var(--orange-deep);
+    width:22px; height:22px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+
+  footer{
+    padding:30px 0 46px;
+    display:flex;
+    justify-content:space-between;
+    color:var(--dim-2);
+    font-size:13px;
+    flex-wrap:wrap;
+    gap:12px;
+    border-top:1px solid var(--line);
+  }
+
+  @media (max-width: 720px){
+    .chapter-inner, .chapter:nth-of-type(even) .chapter-inner{ flex-direction:column; }
+    .chapter-art{ flex:0 0 auto; width:100%; max-width:280px; }
+    .rail{ flex-wrap:wrap; }
+    .rail a{ flex:1 1 33%; border-bottom:1px solid var(--line); }
+  }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap topbar">
+    <a class="brand" href="index.html">
+      <img src="assets/kandar-logo.png" alt="Kandar Applications">
+    </a>
+    <a class="back-link" href="index.html#developer-resources">← Back to Kandar Applications</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker">Developer resources</div>
+    <h1>Flutter UI Polish Guide</h1>
+    <p class="lede">Three passes that make any Flutter app feel considered: a real theme, readable and accessible screens, and a loading moment that doesn't flash or stall.</p>
+    <nav class="rail">
+      <a href="#theming"><span class="dot" style="color:var(--orange-light)"></span>Theming</a>
+      <a href="#readability"><span class="dot" style="color:var(--orange)"></span>Readability</a>
+      <a href="#splash"><span class="dot" style="color:var(--orange-deep)"></span>Splash screen</a>
+    </nav>
+  </div>
+</section>
+
+<!-- Chapter 1: Theming -->
+<section class="chapter" id="theming" style="--accent:var(--orange-light)">
+  <div class="wrap chapter-inner">
+    <div class="chapter-art" style="background:radial-gradient(circle at 30% 30%, rgba(255,176,32,0.10), transparent 70%);">
+      <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
+        <circle cx="70" cy="110" r="34" fill="rgba(255,255,255,0.06)"/>
+        <circle cx="102" cy="90" r="34" fill="var(--orange-deep)" opacity="0.85"/>
+        <circle cx="134" cy="72" r="34" fill="var(--orange)"/>
+        <circle cx="166" cy="58" r="30" fill="var(--orange-light)"/>
+        <circle cx="134" cy="72" r="34" fill="none" stroke="var(--white)" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.7"/>
+        <text x="134" y="130" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="rgba(255,255,255,0.55)">seed color</text>
+        <line x1="134" y1="106" x2="134" y2="118" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="chapter-body">
+      <div class="chapter-kicker" style="color:var(--orange-light)">Do this first — everything else builds on it</div>
+      <h2>Theming</h2>
+      <p>If colors and fonts are set inline on individual widgets right now, move them all into one <code>ThemeData</code>. One seed color, passed through <code>ColorScheme.fromSeed</code>, generates an entire accessible palette — primary, surface, error and the rest — so there's no hand-picking ten colors that need to work together.</p>
+      <div class="snippet">class AppTheme {
+  static ThemeData light = ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: const Color(0xFFF2872B), // one brand color
+      brightness: Brightness.light,
+    ),
+    textTheme: _textTheme,
+  );
+}</div>
+      <p>Spacing works the same way. Define a small scale once, and use it everywhere instead of scattering <code>16</code>, <code>15</code>, <code>18</code> across files — consistent spacing does more for a polished feel than almost anything else.</p>
+      <div class="snippet">class Spacing {
+  static const xs = 4.0, sm = 8.0, md = 16.0, lg = 24.0, xl = 32.0;
+}</div>
+      <p>Migrate screen by screen: replace hardcoded <code>Color(0xFF...)</code> and one-off <code>TextStyle</code>s with <code>Theme.of(context)</code> references as you touch each file.</p>
+      <ul class="check-list">
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-light)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>One seed color, via <code>ColorScheme.fromSeed</code></li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-light)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>All text styles come from <code>textTheme</code>, none inline</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-light)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Spacing uses one shared scale, not magic numbers</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-light)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Buttons and cards pull from one shared border radius</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-light)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Dark mode looks acceptable, even before it's pixel-perfect</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter 2: Readability & Tooltips -->
+<section class="chapter" id="readability" style="--accent:var(--orange)">
+  <div class="wrap chapter-inner">
+    <div class="chapter-art" style="background:radial-gradient(circle at 70% 30%, rgba(242,135,43,0.10), transparent 70%);">
+      <svg width="220" height="180" viewBox="0 0 220 180" fill="none">
+        <rect x="30" y="100" width="56" height="56" rx="14" fill="var(--surface-2)" stroke="rgba(255,255,255,0.15)"/>
+        <path d="M50 122h16M50 132h10" stroke="var(--dim)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="58" cy="128" r="34" fill="none" stroke="var(--orange)" stroke-width="1.2" stroke-dasharray="2 4" opacity="0.7"/>
+        <rect x="110" y="30" width="90" height="46" rx="10" fill="var(--orange)"/>
+        <path d="M140 76l8 12 8-12" fill="var(--orange)"/>
+        <rect x="124" y="44" width="62" height="8" rx="4" fill="rgba(0,0,0,0.35)"/>
+        <rect x="124" y="58" width="40" height="8" rx="4" fill="rgba(0,0,0,0.35)"/>
+      </svg>
+    </div>
+    <div class="chapter-body">
+      <div class="chapter-kicker" style="color:var(--orange)">Make it usable before it looks finished</div>
+      <h2>Readability &amp; tooltips</h2>
+      <p>Wrap any icon-only button in a <code>Tooltip</code> — icon-only AppBar actions, a bare FAB, disabled buttons that should say <em>why</em> they're disabled.</p>
+      <div class="snippet">Tooltip(
+  message: 'Delete item',
+  child: IconButton(
+    icon: const Icon(Icons.delete_outline),
+    onPressed: _delete,
+  ),
+)</div>
+      <p>For text: keep body copy at 14sp minimum, check contrast against the background (4.5:1 for body text, 3:1 for large text), and never rely on color alone for meaning — pair red or green states with an icon or label too.</p>
+      <p>Anything visually abbreviated should still read naturally to a screen reader:</p>
+      <div class="snippet">Semantics(
+  label: 'Total balance: 4,250 rupees',
+  child: Text('₹4,250', style: ...),
+)</div>
+      <ul class="check-list">
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Every icon-only button has a tooltip</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>No body text below 14sp</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Status uses icon + color, never color alone</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Long text has real overflow handling, no silent clipping</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Tap targets are at least 48×48</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter 3: Splash Screen -->
+<section class="chapter" id="splash" style="--accent:var(--orange-deep)">
+  <div class="wrap chapter-inner">
+    <div class="chapter-art" style="background:radial-gradient(circle at 30% 70%, rgba(232,89,12,0.12), transparent 70%);">
+      <svg width="180" height="200" viewBox="0 0 180 200" fill="none">
+        <rect x="20" y="10" width="140" height="180" rx="22" fill="var(--surface)" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+        <circle cx="90" cy="90" r="30" fill="none" stroke="var(--orange-deep)" stroke-width="1" stroke-dasharray="2 5" opacity="0.5"/>
+        <path d="M90 66 L104 90 L90 114 L76 90 Z" fill="var(--orange)"/>
+        <circle cx="90" cy="90" r="6" fill="var(--white)"/>
+        <path d="M70 148a20 20 0 0 1 40 0" stroke="var(--orange-light)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="chapter-body">
+      <div class="chapter-kicker" style="color:var(--orange-deep)">Do this last, once the theme is settled</div>
+      <h2>Loading screen before home</h2>
+      <p>Keep the flow simple: <code>main() → SplashScreen → (real init work) → HomeScreen</code>. Use the wait to do actual work — precache images, load preferences, check auth state — not just a timer.</p>
+      <div class="snippet">Future&lt;void&gt; _init() async {
+  final stopwatch = Stopwatch()..start();
+
+  await Future.wait([
+    _loadPrefs(),
+    _precacheAssets(),
+  ]);
+
+  final elapsed = stopwatch.elapsedMilliseconds;
+  if (elapsed < 800) {
+    await Future.delayed(Duration(milliseconds: 800 - elapsed));
+  }
+
+  if (mounted) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
+  }
+}</div>
+      <div class="note">
+        <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="var(--orange-light)" stroke-width="1.3" fill="none"/><path d="M8 5v4M8 11h.01" stroke="var(--orange-light)" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span>The 800ms floor stops a jarring flash on fast devices where init finishes almost instantly.</span>
+      </div>
+      <p>Flutter apps have a blank gap before Dart even starts — the <code>flutter_native_splash</code> package covers that gap natively, so the logo shows before your Dart splash screen ever mounts.</p>
+      <div class="snippet">dev_dependencies:
+  flutter_native_splash: ^2.4.0
+
+# then:
+dart run flutter_native_splash:create</div>
+      <ul class="check-list">
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-deep)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Splash does real init work, not <code>Future.delayed</code> alone</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-deep)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Minimum ~800ms display time</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-deep)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Uses <code>pushReplacement</code>, so back doesn't return to it</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-deep)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Key assets precached before Home renders</li>
+        <li><svg width="15" height="15" viewBox="0 0 15 15"><path d="M2 8l4 4 7-9" stroke="var(--orange-deep)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Native splash configured for the pre-Flutter gap</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <h2>Suggested order of work</h2>
+    <ol class="order-list">
+      <li>Build <code>AppTheme</code> and wire it into <code>MaterialApp</code></li>
+      <li>Sweep screens, replacing hardcoded colors and text styles with theme references</li>
+      <li>Add tooltips, then fix contrast and text-size issues</li>
+      <li>Add the splash screen last, once the theme it displays is final</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+    <span>© 2026 Kandar Applications</span>
+    <span>A Vikhruthi initiative</span>
+  </div>
+</footer>
+
+</body>
+</html>
