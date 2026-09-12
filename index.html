@@ -234,6 +234,42 @@
     color:var(--dim-2);
   }
 
+  /* Developer Resources */
+  .guide-grid{
+    display:flex;
+    flex-direction:column;
+  }
+  .guide-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:24px;
+    padding:24px 4px;
+    border-top:1px solid var(--line);
+    text-decoration:none;
+    flex-wrap:wrap;
+  }
+  .guide-card:last-child{ border-bottom:1px solid var(--line); }
+  .guide-card:hover .guide-title{ color:var(--orange-light); }
+  .guide-title{
+    font-family:'Poppins', system-ui, sans-serif;
+    font-size:18px;
+    font-weight:600;
+    color:var(--white);
+    transition:color .15s ease;
+  }
+  .guide-desc{
+    color:var(--dim);
+    font-size:14.5px;
+    margin-top:6px;
+    max-width:420px;
+  }
+  .guide-arrow{
+    font-size:13.5px;
+    color:var(--dim-2);
+    white-space:nowrap;
+  }
+
   /* Follow */
   .follow{
     display:grid;
@@ -273,6 +309,7 @@
     nav.top-links{ display:none; }
     .app-card{ flex-direction:column; }
     .app-card .meta{ align-items:flex-start; }
+    .guide-card{ flex-direction:column; align-items:flex-start; gap:6px; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -290,6 +327,7 @@
     <nav class="top-links">
       <a href="#apps">Apps</a>
       <a href="#approach">Approach</a>
+      <a href="#developer-resources">Developer Resources</a>
       <a href="#follow">Follow</a>
     </nav>
   </div>
@@ -359,6 +397,31 @@
   </div>
 </section>
 
+<section id="developer-resources">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Developer resources</h2>
+      <p>Guides from our own build process, written down as we go.</p>
+    </div>
+    <div class="guide-grid">
+      <a class="guide-card" href="play-store-handbook.html">
+        <div>
+          <div class="guide-title">Play Store Publishing Guide</div>
+          <div class="guide-desc">A Flutter developer's field manual from a finished app to Play Console's internal testing track.</div>
+        </div>
+        <span class="guide-arrow">Read guide →</span>
+      </a>
+      <a class="guide-card" href="flutter-ui-polish-guide.html">
+        <div>
+          <div class="guide-title">Flutter UI Polish Guide</div>
+          <div class="guide-desc">Theming, readability and tooltips, and a proper splash screen — in the order we'd tackle them.</div>
+        </div>
+        <span class="guide-arrow">Read guide →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section id="follow" style="border-bottom:none;">
   <div class="wrap follow">
     <div>
@@ -368,7 +431,6 @@
     <div class="link-list">
       <a href="https://instagram.com/kandar.applications" target="_blank" rel="noopener">Instagram <span class="action">Follow</span></a>
       <a href="https://github.com/KandarApplications" target="_blank" rel="noopener">GitHub <span class="action">View profile</span></a>
-      <a href="play-store-handbook.html">Play Store Publishing Guide <span class="action">Learn</span></a>
       <a href="privacy.html">Privacy Policy <span class="action">Read</span></a>
       <a href="mailto:kandar.applications@gmail.com">Email <span class="action">Contact</span></a>
       <a href="https://groups.google.com/u/2/g/kandar-applications-testers" target="_blank" rel="noopener">Get Free Early Access<span class="action">Join</span></a>
