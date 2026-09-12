@@ -293,6 +293,76 @@
   .link-list a:hover{ color:var(--orange-light); }
   .link-list .action{ font-size:13.5px; color:var(--dim-2); }
 
+  .link-list-btn{
+    all:unset;
+    box-sizing:border-box;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:17px 0;
+    border-top:1px solid var(--line);
+    font-size:16px;
+    width:100%;
+    font-family:'Inter', system-ui, sans-serif;
+  }
+  .link-list-btn:hover{ color:var(--orange-light); }
+  .link-list-btn .action{ font-size:13.5px; color:var(--dim-2); }
+
+  .ea-panel{
+    margin-top:6px;
+    padding:26px 0 6px;
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+  }
+  .ea-step{
+    display:flex;
+    gap:16px;
+  }
+  .ea-icon{
+    width:34px;
+    height:34px;
+    flex-shrink:0;
+    border:1px solid var(--orange-deep);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--orange-light);
+  }
+  .ea-icon svg{ width:18px; height:18px; }
+  .ea-title{
+    font-family:'Poppins', system-ui, sans-serif;
+    font-size:15.5px;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .ea-text p{
+    color:var(--dim);
+    font-size:14.5px;
+    margin:0 0 8px;
+  }
+  .ea-link{
+    color:var(--orange-light);
+    text-decoration:underline;
+    text-decoration-color:var(--orange-deep);
+    text-underline-offset:3px;
+    font-size:14.5px;
+  }
+  .ea-app{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-top:6px;
+  }
+  .ea-app + .ea-app{ margin-top:10px; }
+  .ea-app-name{
+    font-size:14.5px;
+    color:var(--white);
+    font-weight:500;
+  }
+
   footer{
     padding:30px 0 46px;
     display:flex;
@@ -433,7 +503,47 @@
       <a href="https://github.com/KandarApplications" target="_blank" rel="noopener">GitHub <span class="action">View profile</span></a>
       <a href="privacy.html">Privacy Policy <span class="action">Read</span></a>
       <a href="mailto:kandar.applications@gmail.com">Email <span class="action">Contact</span></a>
-      <a href="https://groups.google.com/u/2/g/kandar-applications-testers" target="_blank" rel="noopener">Get Free Early Access<span class="action">Join</span></a>
+      <button type="button" class="link-list-btn" id="ea-toggle" aria-expanded="false" aria-controls="ea-panel">
+        Get Free Early Access <span class="action" id="ea-toggle-label">Show me how</span>
+      </button>
+      <div class="ea-panel" id="ea-panel" hidden>
+        <div class="ea-step">
+          <div class="ea-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 20v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1"/><circle cx="7" cy="7" r="3.2"/><path d="M22 20v-1a4 4 0 0 0-3-3.87"/><path d="M15.5 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="ea-text">
+            <div class="ea-title">1. Join the testers group</div>
+            <p>Click below to join our Google Group — this adds you as an approved tester.</p>
+            <a class="ea-link" href="https://groups.google.com/u/2/g/kandar-applications-testers" target="_blank" rel="noopener">Join the group</a>
+          </div>
+        </div>
+
+        <div class="ea-step">
+          <div class="ea-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+          </div>
+          <div class="ea-text">
+            <div class="ea-title">2. Opt in and install</div>
+            <p>Once you've joined, opt in to each app below and install it from the Play Store.</p>
+            <div class="ea-app">
+              <span class="ea-app-name">ThrivingWS</span>
+              <a class="ea-link" href="https://play.google.com/store/apps/details?id=com.kandarapplications.thrivingws" target="_blank" rel="noopener">Opt in & install</a>
+            </div>
+            <!-- Add more apps here as they enter testing, same block as above -->
+          </div>
+        </div>
+
+        <div class="ea-step">
+          <div class="ea-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </div>
+          <div class="ea-text">
+            <div class="ea-title">3. Stuck? Email us</div>
+            <p>If something doesn't work, we're happy to help directly.</p>
+            <a class="ea-link" href="mailto:kandar.applications@gmail.com">kandar.applications@gmail.com</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -444,6 +554,18 @@
     <span>A Vikhruthi initiative</span>
   </div>
 </footer>
+
+<script>
+  const eaToggle = document.getElementById('ea-toggle');
+  const eaPanel = document.getElementById('ea-panel');
+  const eaLabel = document.getElementById('ea-toggle-label');
+  eaToggle.addEventListener('click', () => {
+    const isOpen = !eaPanel.hidden;
+    eaPanel.hidden = isOpen;
+    eaToggle.setAttribute('aria-expanded', String(!isOpen));
+    eaLabel.textContent = isOpen ? 'Show me how' : 'Hide';
+  });
+</script>
 
 </body>
 </html>
