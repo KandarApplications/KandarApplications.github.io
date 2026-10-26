@@ -113,35 +113,6 @@
     color:var(--dim);
   }
 
-  /* Status strip */
-  .status{
-    border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-    background:linear-gradient(90deg, rgba(232,89,12,0.08), transparent 60%);
-  }
-  .status .wrap{
-    padding:18px 28px;
-    display:flex;
-    gap:14px;
-    align-items:center;
-    font-size:14.5px;
-    color:var(--dim);
-  }
-  .status .pulse{
-    width:8px;height:8px;border-radius:50%;
-    background:var(--orange);
-    flex-shrink:0;
-    position:relative;
-  }
-  .status .pulse::after{
-    content:'';
-    position:absolute; inset:-5px;
-    border-radius:50%;
-    border:1px solid var(--orange);
-    opacity:.45;
-  }
-  .status strong{ color:var(--white); font-weight:500; }
-
   section{
     padding:72px 0;
     border-bottom:1px solid var(--line);
@@ -216,18 +187,39 @@
     gap:12px;
     flex-shrink:0;
   }
-  .status-tag{
-    font-size:12.5px;
-    color:var(--orange-light);
-    border:1px solid var(--orange-deep);
-    padding:5px 13px;
-    border-radius:999px;
-    white-space:nowrap;
-  }
   .app-card .platforms{
     font-size:13px;
     color:var(--dim-2);
   }
+  .app-links{
+    display:flex;
+    gap:12px;
+    align-items:stretch;
+    flex-wrap:wrap;
+  }
+  .app-link{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-width:96px;
+    padding:14px 16px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--surface-2);
+    color:var(--dim);
+    text-decoration:none;
+    font-size:13px;
+    transition:border-color .15s ease, color .15s ease, transform .15s ease;
+  }
+  .app-link:hover{
+    color:var(--orange-light);
+    border-color:var(--orange-deep);
+    transform:translateY(-1px);
+  }
+  .app-link svg{ width:28px; height:28px; }
+  .app-link-label{ text-align:center; white-space:nowrap; }
   .apps-note{
     margin-top:18px;
     font-size:13.5px;
@@ -419,13 +411,6 @@
   </div>
 </section>
 
-<div class="status">
-  <div class="wrap">
-    <span class="pulse"></span>
-    <span><strong>ThrivingWS</strong> is currently in testing on Google Play — full release coming soon.</span>
-  </div>
-</div>
-
 <section id="approach">
   <div class="wrap">
     <div class="section-head">
@@ -453,7 +438,7 @@
   <div class="wrap">
     <div class="section-head">
       <h2>Apps</h2>
-      <p>What we're building right now.</p>
+      <p>Explore our apps and available platforms.</p>
     </div>
     <div class="app-card">
       <div>
@@ -461,12 +446,21 @@
         <div class="tagline">Building wealth, one calculation at a time.</div>
         <div class="desc">A practical personal finance toolkit designed to help you understand, evaluate, and plan your finances through simple, transparent calculations.</div>
       </div>
-      <div class="meta">
-        <span class="status-tag">In testing</span>
-        <span class="platforms">Android · Google Play</span>
+      <div class="app-links" aria-label="ThrivingWS platforms">
+        <a class="app-link" href="https://kandarapplications.github.io/thrivingws.html" aria-label="ThrivingWS Web version, work in progress">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9.2"/><path d="M2.8 12h18.4M12 2.8c2.5 2.5 3.7 5.6 3.7 9.2s-1.2 6.7-3.7 9.2c-2.5-2.5-3.7-5.6-3.7-9.2S9.5 5.3 12 2.8z"/>
+          </svg>
+          <span class="app-link-label">Web (WIP)</span>
+        </a>
+        <a class="app-link" href="https://play.google.com/store/apps/details?id=com.kandarapplications.thrivingws&amp;pcampaignid=web_share" target="_blank" rel="noopener" aria-label="ThrivingWS for Android on Google Play">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 3.5 19.5 12 5 20.5z"/><path d="m5 3.5 9.2 8.5L5 20.5"/><path d="m14.2 12 5.3-3.1M14.2 12l5.3 3.1"/>
+          </svg>
+          <span class="app-link-label">Android</span>
+        </a>
       </div>
     </div>
-    <p class="apps-note">Each app will get its own page here with details, screenshots, and download links as it's ready to launch.</p>
   </div>
 </section>
 
@@ -527,14 +521,11 @@
           </div>
           <div class="ea-text">
             <div class="ea-title">2. Opt in and install</div>
-            <p>Once you've joined, opt in to each app below and install it from the Play Store.</p>
+            <p>Once you've joined, opt in to Sherlock Word Finder below and install it from the Play Store.</p>
             <div class="ea-app">
-              <span class="ea-app-name">ThrivingWS</span>
-              <a class="ea-link" href="https://play.google.com/store/apps/details?id=com.kandarapplications.thrivingws" target="_blank" rel="noopener">Opt in & install</a>
-              <span class="ea-app-name">Save Snowy</span>
-              <a class="ea-link" href="https://play.google.com/store/apps/details?id=com.kandarapplications.save_snowy" target="_blank" rel="noopener">Opt in & install</a>
+              <span class="ea-app-name">Sherlock Word Finder</span>
+              <a class="ea-link" href="https://play.google.com/store/apps/details?id=com.kandarapplications.sherlock_word_finder" target="_blank" rel="noopener">Opt in & install</a>
             </div>
-            <!-- Add more apps here as they enter testing, same block as above -->
           </div>
         </div>
 
